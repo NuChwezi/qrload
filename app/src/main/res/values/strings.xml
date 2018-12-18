@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">QR APP</string>
+    <string name="firstButton">Zeskanuj kod QR</string>
+    <string name="secondButton">Utwórz kod QR</string>
+    <string name="thirdButton">Wybierz kod QR z telefonu</string>
+    <string name="hint">Tutaj wprowadź tekst</string>
+    <string name="createButton">Utwórz kod QR</string>
+    <string name="saveButton">Zapisz kod QR</string>
+    <string name="searchButton">Wyszukaj kod QR</string>
+</resources>
