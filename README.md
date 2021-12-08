@@ -1,11 +1,7 @@
-QR scanner&generator App
-===================================
-Android app which can scan, generate and save QR codes for you. Uses ZXing library.
+# qrload
+
+QRLOAD is an app for reading, writing and sharing qrcodes. It is based off of the famous ZXing library.
 
 It requires camera and device storage permissions to work properly.
 
-
-Soon
-----
-New activity which will let the user choose an image of QR code from his storage. Code will be read then.
-
+To Contact Developers: nuchwezi@gmail.com
