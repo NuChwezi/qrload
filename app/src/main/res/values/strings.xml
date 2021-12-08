@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">QR APP</string>
-    <string name="firstButton">Zeskanuj kod QR</string>
-    <string name="secondButton">Utwórz kod QR</string>
-    <string name="thirdButton">Wybierz kod QR z telefonu</string>
-    <string name="hint">Tutaj wprowadź tekst</string>
-    <string name="createButton">Utwórz kod QR</string>
-    <string name="saveButton">Zapisz kod QR</string>
-    <string name="searchButton">Wyszukaj kod QR</string>
+    <string name="app_name">QRLOAD</string>
+    <string name="firstButton">Scan the QR code</string>
+    <string name="secondButton">Create a QR code</string>
+    <string name="thirdButton">Select the QR code from your phone</string>
+    <string name="hint">Enter your text here</string>
+    <string name="createButton">Create a QR code</string>
+    <string name="saveButton">Write down the QR code</string>
+    <string name="searchButton">Search for the QR code</string>
+    <string name="hint_startup_message">QRLOAD is an app for reading, creating and saving QRCODEs. The technology is from the Nuchwezi ICT Research Labs.</string>
 </resources>

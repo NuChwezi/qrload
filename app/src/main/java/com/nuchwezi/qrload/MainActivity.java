@@ -1,4 +1,4 @@
-package com.example.android.qrapp;
+package com.nuchwezi.qrload;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+
+import com.example.android.qrapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private Button scanningButton;
     private Button creatingButton;
     private Button searchingButton;
+    private ImageView scanningImage;
 
 
     // create an action bar button
@@ -32,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.helpbutton) {
             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            builder.setTitle("Pomoc");
+            builder.setTitle("HELP");
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
             {
                 @Override
@@ -42,9 +46,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            builder.setMessage("Jeśli kody nie zapisują się w pamięci, wtedy:\nPrzytrzymaj palec na ikonie aplikacji," +
-                    "wybierz opcję 'O aplikacji', następnie 'Uprawnienia', wyłącz i włącz opcję 'Pamięć wewnętrzna'." +
-                    "Na koniec zresetuj aplikację. ");
+            String about = String.format("%s \n\n****************\n\n%s: Version %s (Build %s)",
+                    getString(R.string.hint_startup_message),
+                    getString(R.string.app_name),
+                    Utility.getVersionName(this),
+                    Utility.getVersionNumber(this));
+
+            String help = "*** HELP ***\n\n"
+            +"If the QRCodes aren\'t being saved on the device: "
+            +"\n\n** Hold your finger on the application icon,"
+                    +"\n** Select 'About App', then 'Permissions', " +
+                    "\n** disable and enable 'Internal Storage'" +
+                    "\n** Finally, reset the application, and then Try Again.";
+
+            builder.setMessage(String.format("%s\n\n%s", about, help));
             AlertDialog alert1 = builder.create();
             alert1.show();
         }
@@ -58,11 +73,21 @@ public class MainActivity extends AppCompatActivity {
 
         //textResult = (TextView) findViewById(R.id.text_result);
 
+        scanningImage = (ImageView) findViewById(R.id.imgScanBtn);
+
         scanningButton = (Button) findViewById(R.id.qr_scan);
 
         creatingButton = (Button) findViewById(R.id.qr_create);
 
         searchingButton = (Button) findViewById(R.id.qr_search);
+
+        scanningImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+                startActivity(intent);
+            }
+        });
 
         scanningButton.setOnClickListener(new View.OnClickListener() {
             @Override

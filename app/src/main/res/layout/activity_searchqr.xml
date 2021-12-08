@@ -16,6 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="64dp"
-        android:visibility="invisible"/>
+        android:layout_weight="1"
+        android:visibility="invisible" />
 
+    <TextView
+        android:id="@+id/searchResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="64dp" />
 </LinearLayout>

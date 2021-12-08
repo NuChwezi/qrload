@@ -1,29 +1,21 @@
-package com.example.android.qrapp;
+package com.nuchwezi.qrload;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.qrapp.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -31,15 +23,11 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
 
@@ -77,32 +65,7 @@ public class CreateActivity extends AppCompatActivity
 
                 String text = editText.getText().toString().trim();
 
-                if (!text.equals(""))
-                {
-                    mainText = text;
-                    MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
-
-                    try
-                    {
-                        BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 1000, 1000);
-                        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                        imageView.setImageBitmap(bitmap);
-
-                        mainBitmap = bitmap;
-
-                    }
-                    catch (WriterException e)
-                    {
-                        e.printStackTrace();
-                    }
-
-                    saveButton.setVisibility(View.VISIBLE);
-
-
-                }
-
-                else Toast.makeText(CreateActivity.this, "Wprowadź tekst.", Toast.LENGTH_SHORT).show();
+                generateQRCODE(text);
             }
         });
 
@@ -114,13 +77,13 @@ public class CreateActivity extends AppCompatActivity
 
                 if(!checkPermission())
                 {
-                    Toast.makeText(getApplicationContext(), "Nie przyznano wystarczających uprawnień.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Sufficient authorization has not been granted.", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CreateActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
 
 
-                File folder = new File(Environment.getExternalStorageDirectory() + File.separator + "Kody_QR");
+                File folder = new File(Environment.getExternalStorageDirectory() + File.separator + "QRLOAD__QRCodes");
 
                 if (!folder.exists()) {
                     folder.mkdirs();
@@ -140,10 +103,78 @@ public class CreateActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
 
-                Toast.makeText(CreateActivity.this, "Kod zapisano w: /Pamięć Wewnętrzna/Kody_QR", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CreateActivity.this, "Code written w: /Internal storage/QRLOAD__QRCodes", Toast.LENGTH_SHORT).show();
 
             }
         });
+
+        // in case content was shared from outside NeD
+        handleIntent();
+    }
+
+    private void handleIntent() {
+
+        Intent intent = getIntent();
+        if(intent == null)
+            return;
+
+        try {
+            // ignore if from launcher...
+            if (intent.getCategories().contains("android.intent.category.LAUNCHER"))
+                return;
+        }catch (Exception e ){}
+
+        Uri uri = intent.getData();
+        String sharedText = null;
+
+        if(uri == null){
+            uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        }
+
+        if (uri == null) {
+
+            sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if(sharedText == null) {
+                return;
+            }
+        }
+
+
+        if (sharedText == null) {
+            return;
+        }else {
+           generateQRCODE(sharedText);
+        }
+
+    }
+
+    private void generateQRCODE(String text) {
+        if (!text.equals(""))
+        {
+            mainText = text;
+            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+
+            try
+            {
+                BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 1000, 1000);
+                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                imageView.setImageBitmap(bitmap);
+
+                mainBitmap = bitmap;
+
+            }
+            catch (WriterException e)
+            {
+                e.printStackTrace();
+            }
+
+            saveButton.setVisibility(View.VISIBLE);
+
+
+        }
+
+        else Toast.makeText(CreateActivity.this, "Enter your text.", Toast.LENGTH_SHORT).show();
     }
 
     private boolean checkPermission()

@@ -1,10 +1,8 @@
-package com.example.android.qrapp;
+package com.nuchwezi.qrload;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -81,7 +79,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         myResult = result.getText();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Skanowanie ukończone");
+        builder.setTitle("Scanning Results...");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener()
         {
             @Override
@@ -90,20 +88,32 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                 scannerView.resumeCameraPreview(ScanActivity.this);
             }
         });
-        builder.setNeutralButton("Odwiedź", new DialogInterface.OnClickListener()
+        builder.setNeutralButton("Share", new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
 
-                if (!myResult.startsWith("http://") && !myResult.startsWith("https://"))
+                /*if (!myResult.startsWith("http://") && !myResult.startsWith("https://"))
                     myResult = "http://" + myResult;
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(myResult));
-                startActivity(browserIntent);
+                startActivity(browserIntent);*/
+
+                shareActiveBufferToClipboard(myResult);
             }
         });
-        builder.setMessage("Wynik skanowania: " + myResult);
+        builder.setMessage(myResult);
         AlertDialog alert1 = builder.create();
         alert1.show();
+    }
+
+    private void shareActiveBufferToClipboard(String data) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, data);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 }
